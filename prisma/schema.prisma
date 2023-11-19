@@ -10,24 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  SUPER_ADMIN
+  ORG_ADMIN
+  ORG_MEMBER
+  ORG_TEACHER
+  ORG_PARENT
+  ORG_STUDENT
+}
+
 model Organization {
-  id String @id @default(uuid())
-  name String
+  id      String @id @default(uuid())
+  name    String
   logoUrl String?
-  cnpj String
-  phone String?
-  user User[]
+  cnpj    String
+  phone   String?
+  user    User[]
 
   @@map("organization")
 }
 
 model User {
-  id String @id @default(uuid())
-  organization Organization @relation(fields: [organizationID], references: [id])
-  organizationID String
-  name String
-  email String
-  password String
-  avatarUrl String?
+  id             String        @id @default(uuid())
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  name           String
+  email          String
+  password       String
+  avatarUrl      String?
+  role           UserRole
+
   @@map("user")
 }
